@@ -1,10 +1,25 @@
-import { signalStore, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
-const initialState = {
+type CatState = {
+  cats: string[];
+};
+
+const initialState: CatState = {
   cats: [],
 };
 
 export const CatStore = signalStore(
-  { providedIn: 'root' },
-  withState(initialState)
+  withState(initialState),
+  withMethods((store) => {
+    return {
+      addCat(name: string): void {
+        patchState(store, (state) => ({ cats: [...state.cats, name] }));
+      },
+      removeCat(name: string): void {
+        patchState(store, (state) => ({
+          cats: state.cats.filter((cat) => cat !== name),
+        }));
+      },
+    };
+  })
 );
