@@ -10,4 +10,13 @@ import { CatStore } from './store/cat.store';
 })
 export class AppComponent {
   public store = inject(CatStore);
+
+  constructor() {
+    this.store.addCat('sample cat');
+    this.store.addCat('szymon`s cat')
+  }
+
+  public onAddCatClick(catName: string): void {
+    this.store.addCat(catName);
+  }
 }

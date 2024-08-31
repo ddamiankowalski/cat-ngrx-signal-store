@@ -1,1 +1,11 @@
-Hello world!
+
+<div class="cat-list">
+  @for(cat of store.cats(); track cat) {
+    <span>{{ cat }}</span>
+  }
+</div>
+
+<div class="cat-add">
+  <input #input />
+  <button (click)="onAddCatClick(input.value)">Add cat</button>
+</div>

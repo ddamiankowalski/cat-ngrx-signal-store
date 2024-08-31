@@ -1,4 +1,5 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { computed } from '@angular/core';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 
 type CatState = {
   cats: string[];
@@ -9,7 +10,17 @@ const initialState: CatState = {
 };
 
 export const CatStore = signalStore(
+  // tutaj dodajemy initial state
   withState(initialState),
+
+  // tutaj dodajemy selektory
+  withComputed((store) => {
+    return {
+      catsCount: computed(() => store.cats().length)
+    }
+  }),
+
+  // tutaj dodajemy metody (reducery)
   withMethods((store) => {
     return {
       addCat(name: string): void {
