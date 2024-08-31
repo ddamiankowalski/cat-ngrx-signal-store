@@ -9,3 +9,7 @@
   <input #input />
   <button [disabled]="store.isLoading()" (click)="onAddCatClick(input.value)">Add cat</button>
 </div>
+
+<div>
+  <span>The amount of cats is {{ store.catsCount() }}</span>
+</div>

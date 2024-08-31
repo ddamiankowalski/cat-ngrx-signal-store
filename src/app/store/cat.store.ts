@@ -1,5 +1,7 @@
 import { computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { of, pipe, switchMap, tap } from 'rxjs';
 
 type CatState = {
   cats: string[];
@@ -33,6 +35,10 @@ export const CatStore = signalStore(
           cats: state.cats.filter((cat) => cat !== name),
         }));
       },
+      getInfo: rxMethod<string>(pipe(
+        switchMap(info => of(info)),
+        tap(x => console.log(x))
+      )),
       async _fetchCats() {
         patchState(store, { isLoading: true });
 
