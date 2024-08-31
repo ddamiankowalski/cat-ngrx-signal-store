@@ -1,12 +1,14 @@
 import { computed } from '@angular/core';
-import { patchState, signalStore, watchState, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 
 type CatState = {
   cats: string[];
+  isLoading: boolean;
 };
 
 const initialState: CatState = {
   cats: [],
+  isLoading: false
 };
 
 export const CatStore = signalStore(
@@ -31,12 +33,21 @@ export const CatStore = signalStore(
           cats: state.cats.filter((cat) => cat !== name),
         }));
       },
+      async _fetchCats() {
+        patchState(store, { isLoading: true });
+
+        const promise = new Promise<void>(resolve => setTimeout(() => resolve(), 3000))
+        await promise;
+
+        patchState(store, { cats: ['damians cat', 'szymons cat'], isLoading: false })
+      }
     };
   }),
 
   // tutaj dodajemy metody typu "hooks"
   withHooks({
-    onInit: () => {},
-    onDestroy: () => {}
+    onInit: (store) => {
+      store._fetchCats();
+    }
   })
 );

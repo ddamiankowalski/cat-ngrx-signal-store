@@ -7,5 +7,5 @@
 
 <div class="cat-add">
   <input #input />
-  <button (click)="onAddCatClick(input.value)">Add cat</button>
+  <button [disabled]="store.isLoading()" (click)="onAddCatClick(input.value)">Add cat</button>
 </div>
