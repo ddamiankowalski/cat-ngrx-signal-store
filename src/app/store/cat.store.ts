@@ -1,5 +1,5 @@
 import { computed } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, watchState, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 
 type CatState = {
   cats: string[];
@@ -32,5 +32,11 @@ export const CatStore = signalStore(
         }));
       },
     };
+  }),
+
+  // tutaj dodajemy metody typu "hooks"
+  withHooks({
+    onInit: () => {},
+    onDestroy: () => {}
   })
 );
