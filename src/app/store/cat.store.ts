@@ -1,5 +1,12 @@
 import { computed } from '@angular/core';
-import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { of, pipe, switchMap, tap } from 'rxjs';
 
@@ -10,7 +17,7 @@ type CatState = {
 
 const initialState: CatState = {
   cats: [],
-  isLoading: false
+  isLoading: false,
 };
 
 export const CatStore = signalStore(
@@ -20,8 +27,8 @@ export const CatStore = signalStore(
   // tutaj dodajemy selektory
   withComputed((store) => {
     return {
-      catsCount: computed(() => store.cats().length)
-    }
+      catsCount: computed(() => store.cats().length),
+    };
   }),
 
   // tutaj dodajemy metody (reducery)
@@ -35,18 +42,25 @@ export const CatStore = signalStore(
           cats: state.cats.filter((cat) => cat !== name),
         }));
       },
-      getInfo: rxMethod<string>(pipe(
-        switchMap(info => of(info)),
-        tap(x => console.log(x))
-      )),
+      getInfo: rxMethod<string>(
+        pipe(
+          switchMap((info) => of(info)),
+          tap((x) => console.log(x))
+        )
+      ),
       async _fetchCats() {
         patchState(store, { isLoading: true });
 
-        const promise = new Promise<void>(resolve => setTimeout(() => resolve(), 3000))
+        const promise = new Promise<void>((resolve) =>
+          setTimeout(() => resolve(), 3000)
+        );
         await promise;
 
-        patchState(store, { cats: ['damians cat', 'szymons cat'], isLoading: false })
-      }
+        patchState(store, {
+          cats: ['damians cat', 'szymons cat'],
+          isLoading: false,
+        });
+      },
     };
   }),
 
@@ -54,6 +68,6 @@ export const CatStore = signalStore(
   withHooks({
     onInit: (store) => {
       store._fetchCats();
-    }
+    },
   })
 );
