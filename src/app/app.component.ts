@@ -1,13 +1,22 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { CatStore } from './store/cat.store';
+import { interval, map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  providers: [CatStore],
 })
 export class AppComponent {
-  title = 'cat-ngrx-api';
+  public store = inject(CatStore);
+
+  constructor() {
+    this.store.getInfo(interval(500).pipe(map(i => i.toString())));
+  }
+
+  public onAddCatClick(catName: string): void {
+    this.store.addCat(catName);
+  }
 }
